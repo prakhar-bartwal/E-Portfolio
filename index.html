@@ -1,85 +1,989 @@
-<!The website is live on "https://prakhar-bartwal.github.io/E-Portfolio/">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prakhar Bartwal's Portfolio.</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Prakhar Bartwal - Student & Developer</title>
+    <style>
+        /* Reset and Base Styles */
+        :root {
+            /* Updated for darker theme */
+            --gradient-start: #101010; /* Very dark grey for gradient center */
+            --primary-black: #000000;  /* Pure black for gradient edge and base */
+            --card-bg: #1A1A1A; /* Slightly lighter than pure black for cards */
+            --accent-color: #3A506B;
+            --highlight-color: #5BC0BE;
+            --text-primary: #E0E0E0; /* Slightly brighter for better contrast on black */
+            --text-secondary: #B0B0B0; /* Slightly brighter for better contrast */
+            --border-color: #2A2A2A; /* Darker border for subtle separation */
+            --font-heading: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-body: 'Open Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            --nav-height: 70px;
+            --transition-speed: 0.4s ease;
+            --shadow-color: rgba(91, 192, 190, 0.08); /* Softer shadow for dark theme */
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--primary-black); /* Base black color */
+            background-image: radial-gradient(ellipse at center, var(--gradient-start) 0%, var(--primary-black) 75%);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 17px;
+            overflow-x: hidden;
+            min-height: 100vh; /* Ensure gradient covers full viewport height */
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+
+        h1 { font-size: clamp(32px, 6vw, 50px); }
+        h2 { font-size: clamp(28px, 6vw, 44px); text-align: center; margin-bottom: 50px; position: relative; }
+        h2::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--highlight-color));
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+        h3 { font-size: clamp(22px, 5vw, 30px); color: var(--highlight-color); }
+        h4.edu-title {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+        .edu-meta {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        p { margin-bottom: 1.2rem; }
+        a {
+            color: var(--highlight-color);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+        a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Layout & Containers */
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 25px;
+        }
+
+        section {
+            padding: 100px 0;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background-color: rgba(5, 5, 5, 0.75); /* Darker transparent nav */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: top 0.3s, background-color 0.3s;
+        }
+        nav .container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+        nav .logo {
+            font-family: var(--font-heading);
+            font-size: 1.7rem;
+            color: var(--highlight-color);
+            font-weight: 700;
+            display: inline-block;
+            min-width: 50px;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            padding-left: 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li:first-child { margin-left: 0; }
+        nav ul li:last-child { margin-right: 0; }
+
+        nav ul li a {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 5px 0;
+        }
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2.5px;
+            background-color: var(--highlight-color);
+            transition: width var(--transition-speed);
+            border-radius: 1px;
+        }
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: var(--nav-height);
+        }
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            width: 100%;
+        }
+        .hero-image-container {
+            flex-shrink: 0;
+        }
+        .profile-picture {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--highlight-color);
+            box-shadow: 0 0 25px rgba(91, 192, 190, 0.2); /* Slightly more pronounced shadow for pic */
+        }
+        .hero-text {
+            flex-grow: 1;
+        }
+        .hero-text h1 {
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            text-align: left;
+        }
+         .hero-text h1::after { display: none; }
+
+        .hero-text .subtitle {
+            font-size: clamp(18px, 3vw, 22px);
+            color: var(--highlight-color);
+            margin-bottom: 15px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            text-align: left;
+        }
+        .social-icons-hero {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .social-icons-hero a {
+            margin-right: 15px;
+            margin-left: 0;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        .social-icon-img {
+            width: 32px;
+            height: 32px;
+            vertical-align: middle;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1); /* Slight background for PNGs if transparent */
+            padding: 2px; /* Optional padding */
+        }
+        .social-icons-hero a:hover {
+            transform: scale(1.15);
+        }
+        .hero-text .about-me-snippet {
+            font-size: 1.05rem;
+            margin-bottom: 25px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            text-align: left;
+            max-width: 650px;
+        }
+        .hero-actions {
+            text-align: left;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: var(--highlight-color);
+            color: var(--primary-black); /* Text on button to black for contrast */
+            border: 2px solid var(--highlight-color);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color var(--transition-speed), color var(--transition-speed), transform 0.2s ease;
+            margin-top: 10px;
+        }
+        .cta-button:hover {
+            background-color: transparent;
+            color: var(--highlight-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+
+        /* Skills & Projects Section */
+        .skills-container, .projects-container, .education-container { /* Added education-container */
+            margin-bottom: 60px;
+        }
+        .skills-intro p, .projects-intro p {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            font-size: 1.1rem;
+        }
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .skill-tag {
+            background-color: var(--card-bg);
+            color: var(--highlight-color);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid var(--border-color); /* Darker border */
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+        .skill-tag:hover {
+            transform: scale(1.05);
+            background-color: var(--highlight-color);
+            color: var(--primary-black);
+            border-color: var(--highlight-color);
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .project-card, .education-item { /* Grouped styling for project and education cards */
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* Slightly increased shadow */
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+        }
+        .project-card:hover, .education-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px var(--shadow-color);
+        }
+        .project-card .project-image {
+            height: 200px;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--text-primary);
+        }
+        .project-card .project-info, .education-item .education-info { /* Added education-info */
+            padding: 25px;
+            flex-grow: 1;
+        }
+         /* Specific to Education items if needed, reusing .project-card general structure */
+        .education-item {
+            padding: 25px 30px; /* Keep original padding for education item */
+            border-left: 4px solid var(--highlight-color); /* Keep left border */
+            margin-bottom: 25px; /* Keep original margin */
+        }
+        .education-item p { margin-bottom: 0.5rem; }
+
+
+        .project-card h4 {
+            color: var(--highlight-color);
+            margin-bottom: 8px;
+            font-size: 1.4rem;
+        }
+        .project-card .project-year {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            display: block;
+        }
+        .project-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+
+        /* Weekly Class Learnings Section */
+        .learning-item {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border-left: 5px solid var(--highlight-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .learning-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+        .learning-item h3 {
+            margin-bottom: 15px;
+        }
+        .dos-donts-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .dos-list, .donts-list {
+            flex: 1;
+        }
+        .dos-list h4, .donts-list h4 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+        }
+        .dos-list ul, .donts-list ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .dos-list ul li, .donts-list ul li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 8px;
+        }
+        .dos-list ul li::before {
+            content: '✓';
+            color: #28a745;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        .donts-list ul li::before {
+            content: '✗';
+            color: #dc3545;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        .movie-review blockquote {
+            font-style: italic;
+            color: var(--text-primary);
+            border-left: 3px solid var(--highlight-color);
+            padding-left: 15px;
+            margin: 20px 0;
+        }
+        .movie-review .lessons-title {
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-top: 20px;
+        }
+        .essay-content {
+            background-color: var(--card-bg); /* Match card for consistency */
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+
+        /* Contact Section */
+        .contact-intro {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+        }
+        .contact-form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--primary-black); /* Input fields dark */
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--highlight-color);
+            box-shadow: 0 0 0 3px var(--shadow-color);
+        }
+        .form-group textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+        .contact-details-alt {
+            text-align: center;
+            margin-top: 40px;
+        }
+         .contact-details-alt p { font-size: 1.1rem; margin-bottom: 15px; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        footer a {
+            color: var(--highlight-color);
+        }
+        .social-icons-footer a {
+            margin: 0 10px;
+            display: inline-block;
+        }
+        .footer-social-icon-img {
+            width: 28px;
+            height: 28px;
+            vertical-align: middle;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            padding: 1px;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body { font-size: 16px; }
+            nav {
+                height: auto;
+            }
+             nav .container {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px 20px;
+            }
+            nav .logo { margin: 10px 0; }
+            nav ul {
+                position: static;
+                transform: none;
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                padding-bottom: 5px;
+            }
+            nav ul li { margin: 8px 0; }
+
+            #hero {
+                 padding-top: calc(var(--nav-height) + 60px);
+                 min-height: auto;
+                 padding-bottom: 60px;
+            }
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+            .hero-text h1, .hero-text .subtitle, .social-icons-hero, .hero-text .about-me-snippet, .hero-actions {
+                text-align: center;
+            }
+            .hero-text .about-me-snippet { max-width: 100%; }
+            .social-icons-hero a { margin: 0 10px; }
+
+            .cta-button { width: auto; padding: 12px 28px; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .dos-donts-container { flex-direction: column; gap: 20px;}
+        }
+
+        @media (max-width: 576px) {
+            .profile-picture { width: 150px; height: 150px; }
+            h1 { font-size: clamp(28px, 6vw, 40px); }
+            h2 { font-size: 24px; }
+            h3 { font-size: 20px; }
+            .hero-text .about-me-snippet { font-size: 1rem; }
+            .contact-form-container { padding: 25px; }
+            .skill-tag { padding: 8px 15px; font-size: 0.9rem; }
+            .social-icon-img { width: 28px; height: 28px; }
+            .footer-social-icon-img { width: 24px; height: 24px; }
+        }
+
+        .nav-hidden { top: -150px; }
+        .nav-scrolled {
+            background-color: rgba(5, 5, 5, 0.85); /* Darker solid on scroll */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
+
+    <nav id="main-nav">
+        <div class="container">
+            <a href="#hero" class="logo"></a>
             <ul>
-                <li><a href="#about">About Me</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#experience">Work Experience</a></li>
+                <li><a href="#hero" class="active">Home</a></li>
+                <li><a href="#skills-projects">Skills & Projects</a></li>
                 <li><a href="#education">Education</a></li>
+                <li><a href="#learnings">Class Learnings</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
-        </nav>
-        <div class="profile">
-            <img src="profile.jpg" alt="Profile Picture">
-            <h1>Prakhar Bartwal</h1>
-            <p>Student at GEHU</p>
-            <div class="social-links">
-                <a href="https://github.com/prakhar-bartwal">Github</a>
-                <a href="https://t.me/Z3CHS">Telegram</a>
-                <a href="https://www.linkedin.com/in/prakhar-bartwal-b1266b327/">LinkedIn</a>
-                <a href="https://drive.google.com/file/d/1GbLFc1LyKU72mC_ma-8HzxjR-JC8Bakr/view?usp=sharing">Resume</a>
-                <a href="movie.html">Movie Review</a>
-                <a href="selfIntro.html">Self Introduction</a>
-            </div>
         </div>
-    </header>
+    </nav>
 
-    <section id="projects">
-        <h2>Projects</h2>
-        <div class="project-list">
-            <div class="project">
-                <h3>Exploratory Data Analysis. (2025)</h3>
-                <p>Developed a working Machine Learning Project for performing Exploratory Data Analysis using Python and different libraries.</p>
-            </div>
-            <div class="project">
-                <h3>Network Traffic Visualizer. (2024)</h3>
-                <p>Developed an app for visualizing the incoming and outgoing Network Traffic using Python, GoogleMaps API and Flutter.</p>
-            </div>
-            <div class="project">
-                <h3>Telegram Chatbot for University. (2023)</h3>
-                <p>Designed a working Chatbot on Telegram for the University Students and Staff members.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="experience">
-        <h2>Work Experience</h2>
-        <div class="experience-list">
-            <div class="experience">
-                <h3>Part Time Video Editor (2022-Present)</h3>
-                <p>Worked on some major editing projects with some of the biggest AMV editors.</p>
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-image-container">
+                    <img src="profile.jpg" alt="Prakhar Bartwal" class="profile-picture">
+                </div>
+                <div class="hero-text">
+                    <h1>Prakhar Bartwal</h1>
+                    <p class="subtitle">Student at Graphic Era Hill University</p>
+                    <div class="social-icons-hero">
+                        <a href="https://www.linkedin.com/in/prakhar-bartwal-b1266b327/" target="_blank" title="LinkedIn">
+                            <img src="https://www.citypng.com/public/uploads/preview/hd-vector-flat-linkedin-in-round-icon-png-701751695046390m4phkuuiqm.png" alt="LinkedIn" class="social-icon-img">
+                        </a>
+                        <a href="https://github.com/prakhar-bartwal" target="_blank" title="GitHub">
+                            <img src="https://w7.pngwing.com/pngs/646/324/png-transparent-github-computer-icons-github-logo-monochrome-head-thumbnail.png" alt="GitHub" class="social-icon-img">
+                        </a>
+                    </div>
+                    <p class="about-me-snippet">
+                        🚀 Aspiring Computer Science Engineer with a fervor for Full Stack Web Development (Python, Django, React, Node.js).
+                        Deeply interested in the realms of AI/Machine Learning and the art of creative coding.
+                        My drive is to build impactful, innovative projects and continuously expand my technological horizons.
+                        Hobbies: 🎮 Immersive Gaming, 🎵 Crafting Musical Pieces, 💡 Exploring Cutting-Edge Tech.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#skills-projects" class="cta-button">View My Work</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Skills & Projects Section -->
+    <section id="skills-projects">
+        <div class="container">
+            <h2>My Skills & Projects</h2>
+            <div class="skills-container">
+                <div class="skills-intro">
+                    <p>My toolkit includes a solid foundation in Python, C, and C++, complemented by hands-on experience in Full-Stack Web Development. I'm also delving into Machine Learning, API development, and comfortable in Linux environments, always eager to learn more.</p>
+                </div>
+                <div class="skills-grid">
+                    <span class="skill-tag">Python</span> <span class="skill-tag">C</span> <span class="skill-tag">C++</span>
+                    <span class="skill-tag">JavaScript</span> <span class="skill-tag">HTML5</span> <span class="skill-tag">CSS3</span>
+                    <span class="skill-tag">React</span> <span class="skill-tag">Node.js</span> <span class="skill-tag">Express.js</span>
+                    <span class="skill-tag">Django</span> <span class="skill-tag">PostgreSQL</span> <span class="skill-tag">Machine Learning</span>
+                    <span class="skill-tag">API Development</span> <span class="skill-tag">Linux</span> <span class="skill-tag">Flutter</span>
+                    <span class="skill-tag">Git & GitHub</span>
+                </div>
+            </div>
+            <div class="projects-container">
+                <h3 style="text-align: center; margin-bottom: 30px; color: var(--text-primary);">Featured Projects</h3>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-image">📊</div>
+                        <div class="project-info">
+                            <h4>Exploratory Data Analysis</h4>
+                            <span class="project-year">(2025)</span>
+                            <p>Developed a robust Machine Learning project for performing in-depth Exploratory Data Analysis using Python and various data science libraries, uncovering key insights from datasets.</p>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image">📡</div>
+                        <div class="project-info">
+                            <h4>Network Traffic Visualizer</h4>
+                            <span class="project-year">(2024)</span>
+                            <p>Created an application to visualize incoming and outgoing network traffic, leveraging Python for data processing, Google Maps API for geographical display, and Flutter for the user interface.</p>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image">🤖</div>
+                        <div class="project-info">
+                            <h4>University Telegram Chatbot</h4>
+                            <span class="project-year">(2023)</span>
+                            <p>Designed and implemented a functional Telegram chatbot to assist university students and staff members with common queries and information retrieval, enhancing accessibility.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
     <section id="education">
-        <h2>Education</h2>
-        <div class="education-list">
-            <div class="education">
-                <h3>Bachelor of Technology in Computer Science - GEHU (2022 - 2026)</h3>
-                <p>Currently pursuing my degree with a focus on software engineering.</p>
+        <div class="container education-container"> <!-- Added education-container for consistency if needed -->
+            <h2>My Education</h2>
+            <div class="education-item">
+                 <div class="education-info"> <!-- Added wrapper for content -->
+                    <h4 class="edu-title">Bachelor of Technology in Computer Science</h4>
+                    <span class="edu-meta">Graphic Era Hill University (GEHU) | 2022 - 2026</span>
+                    <p>Currently pursuing my degree with a dedicated focus on software engineering principles, advanced algorithms, and system design. Actively engaging in projects that apply theoretical knowledge to real-world challenges.</p>
+                </div>
             </div>
-            <div class="education">
-                <h3>Schooling - Kendriya Vidyalaya Gauchar (2010-2022)</h3>
-                <p>Completed my 10th and 12th.</p>
+            <div class="education-item">
+                <div class="education-info"> <!-- Added wrapper for content -->
+                    <h4 class="edu-title">Senior Secondary & Secondary Schooling</h4>
+                    <span class="edu-meta">Kendriya Vidyalaya Gauchar | 2010 - 2022</span>
+                    <p>Completed my 12th (Senior Secondary) and 10th (Secondary) standard education, building a strong foundational understanding across various subjects with an early inclination towards science and technology.</p>
+                </div>
             </div>
         </div>
     </section>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+
+    <!-- Weekly Class Learnings Section -->
+    <section id="learnings">
+        <div class="container">
+            <h2>Weekly Class Learnings</h2>
+            <div class="learning-item">
+                <h3>Self-Introduction Mastery</h3>
+                <p>The self-introduction sessions were invaluable. Our instructor highlighted the essence of maintaining strong eye contact, speaking with clarity, and presenting oneself with authentic confidence. Adopting a structured approach to self-introductions significantly refined my communication abilities.</p>
+                <p>I learned to initiate with my name, educational background, and current pursuits for a smooth start. A key focus was articulating my projects: detailing technologies used, challenges overcome, and the tangible impact of my work. This honed my ability to showcase technical skills compellingly.</p>
+                <p>Discussing achievements and certifications reinforced their career-shaping significance. Furthermore, structuring my aspirations—like becoming a skilled software engineer in a reputable company—enabled me to convey my goals with precision.</p>
+                <a href="https://drive.google.com/file/d/1pPL5gujBtAEWeEuDT447E3oDzlD0IL_6/view?usp=drive_link" target="_blank" class="cta-button" style="margin-top:15px; display:inline-block;">Watch My Intro Video</a>
+            </div>
+            <div class="learning-item">
+                <h3>The Art of Extempore Speaking</h3>
+                <p>In a recent class, our instructor underscored the criticality of confidence, lucidity, and structured ideation for effective extempore speeches. Given that extempore demands spontaneous speaking, I grasped the importance of rapid thinking and efficient idea organization.</p>
+                <p>The P-R-E-P method (Point, Reason, Example, Point) was introduced as a powerful technique for structuring responses logically. Beginning with a clear introduction, substantiating the topic with pertinent points, and delivering a strong conclusion are vital for impact.</p>
+                <p>Another crucial lesson was time management—adeptly balancing content within the allocated time without haste or undue pauses. Voice modulation, steady eye contact, and appropriate hand gestures were also emphasized for audience engagement.</p>
+            </div>
+            <div class="learning-item">
+                <h3>Strategic Resume Building</h3>
+                <p>Our instructor recently emphasized crafting a clear, well-organized, and professional resume to create a formidable first impression. I learned that a resume must be concise, spotlight key achievements, and be meticulously tailored to the specific job role.</p>
+                <p>The importance of commencing with a potent summary was stressed, followed by sections for education, technical skills, projects, internships, and certifications. Detailing projects, including technologies employed and their impact, effectively showcases practical application of skills.</p>
+                <a href="https://drive.google.com/file/d/16cfW5_l2MnZXDjBVmo3F-E_7QOay0h5m/view?usp=sharing" target="_blank" class="cta-button" style="margin-top:15px; display:inline-block;">View My Resume</a>
+            </div>
+            <div class="learning-item movie-review">
+                <h3>Movie Review: The Shawshank Redemption</h3>
+                <h4>A Testament to the Unbreakable Spirit</h4>
+                <p>"The Shawshank Redemption" transcends cinema; it's a profound exploration of human endurance and the enduring flame of hope. Andy Dufresne's journey, unjustly imprisoned, is a masterclass in quiet defiance and unwavering resolve.</p>
+                <p>From his entry into Shawshank's grim confines, one is captivated by his inner fortitude. He doesn't rage; he methodically navigates prison's harsh realities, preserving dignity and, crucially, hope.</p>
+                <blockquote>"Remember, Red, hope is a good thing, maybe the best of things, and no good thing ever dies." – Andy Dufresne</blockquote>
+                <p class="lessons-title">Key Lessons Extracted:</p>
+                <ul>
+                    <li><strong>The Power of Quiet Resilience:</strong> Andy's strength is a steady, unwavering force.</li>
+                    <li><strong>The Importance of Inner Sanctuary:</strong> Maintaining selfhood even in oppressive environments.</li>
+                    <li><strong>The Transformative Power of Friendship:</strong> Genuine connection sustains through darkness.</li>
+                    <li><strong>The Long Game:</strong> Significant goals often require patience and unwavering focus.</li>
+                </ul>
+            </div>
+            <div class="learning-item">
+                <h3>Foundations of Public Speaking</h3>
+                <h4>🎤 What is Public Speaking?</h4>
+                <p>Public speaking is delivering a speech or presentation to an audience. It's about communicating ideas clearly, confidently, and effectively, a vital skill for various life situations.</p>
+                <h4>💡 Why Public Speaking Matters</h4>
+                <ul>
+                    <li>Boosts Confidence: Practice builds self-assurance.</li>
+                    <li>Improves Communication Skills: Enhances articulation and active listening.</li>
+                    <li>Enhances Career Growth: Valued by employers for persuasive idea presentation.</li>
+                    <li>Builds Leadership Qualities: Great leaders are often effective speakers.</li>
+                    <li>Encourages Critical Thinking: Speech preparation sharpens logical structuring.</li>
+                </ul>
+                <h4>🧠 Key Elements of Effective Public Speaking</h4>
+                <ol>
+                    <li><strong>Preparation:</strong> Know your topic and audience. Structure: Introduction → Body → Conclusion.</li>
+                    <li><strong>Clarity and Conciseness:</strong> Speak clearly, avoid jargon, keep messages focused.</li>
+                    <li><strong>Body Language:</strong> Maintain eye contact, use gestures, stand confidently.</li>
+                    <li><strong>Voice Modulation:</strong> Vary pitch, tone, and pace. Pause for emphasis.</li>
+                    <li><strong>Engagement:</strong> Start with a hook. Involve the audience.</li>
+                </ol>
+            </div>
+            <div class="learning-item">
+                <h3>Mastering Essay Writing</h3>
+                <div class="dos-donts-container">
+                    <div class="dos-list">
+                        <h4>Do's</h4>
+                        <ul>
+                            <li>Start with a clear outline and thesis statement.</li>
+                            <li>Use a formal tone and impeccable grammar.</li>
+                            <li>Support your points with credible facts or examples.</li>
+                            <li>Edit and proofread meticulously before submission.</li>
+                        </ul>
+                    </div>
+                    <div class="donts-list">
+                        <h4>Don'ts</h4>
+                        <ul>
+                            <li>Don’t use slang or informal language.</li>
+                            <li>Avoid undue repetition of ideas.</li>
+                            <li>Don’t ignore formatting guidelines.</li>
+                            <li>Never plagiarize content; always cite sources.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="essay-content">
+                    <h4>Essay Spotlight: Blockchain Technology</h4>
+                    <p>Blockchain is a revolutionary technology transforming secure information storage and transfer. Initially underpinning cryptocurrencies like Bitcoin, its applications now span banking, healthcare, supply chain management, and more.</p>
+                    <p>At its core, blockchain is a decentralized digital ledger recording transactions across multiple computers, preventing tampering. Each block, containing transactions, is immutable once added to the chain.</p>
+                    <p>Unlike centrally controlled systems, blockchain operates on a peer-to-peer network. Transparency is ensured as all participants can view transaction history. Cryptographic techniques guarantee data integrity. Beyond cryptocurrency, blockchain secures patient records in healthcare, tracks product origins in supply chains, and is explored for government applications like voting systems.</p>
+                    <p>Blockchain technology, with its secure, transparent, and decentralized nature, holds a promising future, poised to significantly shape digital innovation.</p>
+                </div>
+            </div>
+            <div class="learning-item">
+                <h3>Effective Group Discussion Techniques</h3>
+                 <div class="dos-donts-container">
+                    <div class="dos-list">
+                        <h4>Do's</h4>
+                        <ul>
+                            <li>Listen actively and respect diverse opinions.</li>
+                            <li>Contribute meaningful points to sustain discussion flow.</li>
+                            <li>Maintain eye contact and positive body language.</li>
+                            <li>Stay on topic and avoid monopolizing the conversation.</li>
+                        </ul>
+                    </div>
+                    <div class="donts-list">
+                        <h4>Don'ts</h4>
+                        <ul>
+                            <li>Don’t interrupt others while they are speaking.</li>
+                            <li>Avoid being overly aggressive or defensive.</li>
+                            <li>Don’t merely repeat what others have stated.</li>
+                            <li>Don’t remain completely silent; participate constructively.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="learning-item">
+                <h3>Navigating Interview Skills</h3>
+                <p><strong>Today's Learning:</strong> Interviews are more than Q&A; they are about presenting oneself confidently and professionally. I learned the crucial importance of researching the company beforehand, dressing appropriately, and maintaining poised posture and eye contact throughout.</p>
+                 <div class="dos-donts-container">
+                    <div class="dos-list">
+                        <h4>Do's</h4>
+                        <ul>
+                            <li>Dress formally and arrive punctually (or log in early for virtual).</li>
+                            <li>Prepare insightful answers to common questions.</li>
+                            <li>Show genuine enthusiasm and interest in the role.</li>
+                            <li>Ask thoughtful questions at the end.</li>
+                        </ul>
+                    </div>
+                    <div class="donts-list">
+                        <h4>Don'ts</h4>
+                        <ul>
+                            <li>Don’t criticize previous employers or colleagues.</li>
+                            <li>Avoid giving vague or irrelevant answers.</li>
+                            <li>Don’t forget to thank the interviewer for their time.</li>
+                            <li>Don’t check your phone or appear distracted.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="contact-intro">
+                <p>I'm always excited to connect, discuss new projects, explore tech ideas, or collaborate on something amazing. Feel free to reach out!</p>
+            </div>
+            <div class="contact-form-container">
+                <form action="https://formspree.io/f/yourFormspreeEndpoint" method="POST"> <!-- Replace with your Formspree endpoint -->
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button" style="width: 100%;">Send Message</button>
+                </form>
+            </div>
+             <div class="contact-details-alt">
+                <p>Or connect with me directly:</p>
+                <p>Email: <a href="mailto:prakharbartwal01@gmail.com">prakharbartwal01@gmail.com</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Prakhar Bartwal.</p>
+        <div class="container">
+            <div class="social-icons-footer">
+                 <a href="https://www.linkedin.com/in/prakhar-bartwal-b1266b327/" target="_blank" title="LinkedIn">
+                    <img src="https://www.citypng.com/public/uploads/preview/hd-vector-flat-linkedin-in-round-icon-png-701751695046390m4phkuuiqm.png" alt="LinkedIn" class="footer-social-icon-img">
+                </a>
+                <a href="https://github.com/prakhar-bartwal" target="_blank" title="GitHub">
+                    <img src="https://w7.pngwing.com/pngs/646/324/png-transparent-github-computer-icons-github-logo-monochrome-head-thumbnail.png" alt="GitHub" class="footer-social-icon-img">
+                </a>
+            </div>
+            <p>© <span id="currentYear"></span> Prakhar Bartwal. All Rights Reserved.</p>
+            <p>Crafted with passion and a bit of ☕</p>
+        </div>
     </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    let navHeight = document.getElementById('main-nav').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+
+                    document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Dynamic year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Nav behavior on scroll
+        let lastScrollTop = 0;
+        const navbar = document.getElementById('main-nav');
+
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const currentNavHeight = navbar.offsetHeight;
+
+            if (scrollTop > lastScrollTop && scrollTop > currentNavHeight + 50) {
+                navbar.classList.add('nav-hidden');
+            } else {
+                navbar.classList.remove('nav-hidden');
+            }
+            if (scrollTop > 50) {
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+
+            // Active link highlighting on scroll
+            let currentSectionId = '';
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop - currentNavHeight - 100;
+                if (pageYOffset >= sectionTop) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('nav ul li a').forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === `#${currentSectionId}`) {
+                    a.classList.add('active');
+                }
+            });
+            if (!currentSectionId && pageYOffset < document.querySelector('section').offsetTop - currentNavHeight - 100) {
+                 const heroLink = document.querySelector('nav ul li a[href="#hero"]');
+                 if(heroLink) heroLink.classList.add('active');
+            }
+        }, false);
+
+
+        // Intersection Observer for section animations
+        const sections = document.querySelectorAll('section');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        function setInitialActiveLink() {
+            const hash = window.location.hash;
+            let activeLink = document.querySelector('nav ul li a[href="#hero"]');
+            if (hash) {
+                const linkFromHash = document.querySelector(`nav ul li a[href="${hash}"]`);
+                if (linkFromHash) activeLink = linkFromHash;
+            }
+            document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
+            if(activeLink) activeLink.classList.add('active');
+        }
+        window.addEventListener('load', setInitialActiveLink);
+    </script>
 </body>
 </html>
